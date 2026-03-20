@@ -1,2 +1,2 @@
-x : int | str
-x = 3
+x:int|str
+y = x

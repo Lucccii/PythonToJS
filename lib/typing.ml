@@ -24,8 +24,27 @@ type environment = {
     }
   [@@deriving show]
 
+let tp_const = function 
+|BoolV (b)-> UnionT[BoolT]
+|IntV(n)-> UnionT[IntT]
+|FloatV(f)-> UnionT[FloatT]
+|NoneV->UnionT[NoneT]
+|StringV(s)-> UnionT[StringT]
 
-let rec tp_stmt ((env, t, returned) : (environment * tp * bool)) s = true
+let tp_expr (env:environment) (e:expr): tp = match e with
+|Const c  -> tp_const c
+|VarE v->( match listAssoc(x,evn) with
+|Some Int v ->Int v
+| None -> raise (MLFailure "variable not found"))  (*to do*)
+try List.assoc env.static_vars.locals with 
+  UnionT[IntT]
+
+
+let rec tp_stmt ((env, t, returned) : (environment * tp * bool)) s = 
+match s with |Block[Assign(v,e)]->
+  let t = tp_expr env e in Printf.printf "Type %s\n" (Lang.show_tp t); true
+|_-> Printf.printf "type inconnu \n"; true
+
 let tp_fundefn init_env (Fundefn(Fundecl(fn, pards, rt), vds, s)) = true
 
   (* Function declarations of library / predefined functions *)
